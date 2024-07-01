@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>आपला Docker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #ff7e29; /* Orange color */
+            width: 30px;
+            height: 30px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+        }
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff7e29; /* Orange color */
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #ff9e62; /* Lighter shade of orange */
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-gray-900 text-white text-center py-6 border-b border-gray-700">
+        <h1 class="text-4xl font-bold">आपला Docker</h1>
+    </header>
+
+    <main class="container mx-auto mt-10 px-4">
+        <!-- Docker Images Section -->
+        <section class="bg-gray-800 shadow-lg rounded-lg p-8 mb-10">
+            <h2 class="text-3xl font-semibold mb-6">Pulled Images</h2>
+            <div class="flex flex-col md:flex-row items-center md:justify-between mb-6 space-y-4 md:space-y-0">
+                <input type="text" id="imageName" class="border border-gray-600 bg-gray-700 p-3 rounded w-full md:w-auto text-orange-500 placeholder-gray-500" placeholder="Enter Image Name">
+                <div class="flex space-x-4">
+                    <button id="pullImage" onclick="PullImage()" class="btn">Pull Image</button>
+                    <button id="getAllImages" onclick="GetAllImages()" class="btn">Get All Images</button>
+                    <button id="showRunningContainers" onclick="getAllRunningContainers()" class="btn">Show Running Containers</button>
+                    <button id="showStoppedContainers" onclick="showStoppedContainer()" class="btn">Show Stopped Containers</button>
+                </div>
+            </div>
+            <div id="loading" class="loader mx-auto" style="display: none;"></div>
+            <div id="getOutput" class="border border-gray-600 p-4 rounded h-64 overflow-auto bg-gray-900 text-white"></div>
+        </section>
+
+        <!-- Container Management Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Launch a Container</h2>
+                <input type="text" id="launchAnContainer" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="launchContainer" onclick="launchAnContainer()" class="btn">Launch a Container</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Start Container</h2>
+                <input type="text" id="containerNameStart" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="startContainer" onclick="StartContainer()" class="btn">Start Container</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Stop Container</h2>
+                <input type="text" id="containerNameStop" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="stopContainer" onclick="StopContainer()" class="btn">Stop Container</button>
+            </div>
+
+            <!-- Additional Docker Commands -->
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Restart Container</h2>
+                <input type="text" id="containerNameRestart" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="restartContainer" onclick="RestartContainer()" class="btn">Restart Container</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Pause Container</h2>
+                <input type="text" id="containerNamePause" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="pauseContainer" onclick="PauseContainer()" class="btn">Pause Container</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Unpause Container</h2>
+                <input type="text" id="containerNameUnpause" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="unpauseContainer" onclick="UnpauseContainer()" class="btn">Unpause Container</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Kill Container</h2>
+                <input type="text" id="containerNameKill" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="killContainer" onclick="KillContainer()" class="btn">Kill Container</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Remove Container</h2>
+                <input type="text" id="containerNameRm" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <button id="rmContainer" onclick="RmContainer()" class="btn">Remove Container</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Run Command in Container</h2>
+                <input type="text" id="containerNameExec" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Container Name">
+                <input type="text" id="commandExec" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Command">
+                <button id="execCommand" onclick="ExecCommand()" class="btn">Run Command</button>
+            </div>
+        </section>
+
+        <!-- Docker Image Management Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Push Image</h2>
+                <input type="text" id="imageNamePush" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Image Name">
+                <button id="pushImage" onclick="PushImage()" class="btn">Push Image</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Build Image</h2>
+                <input type="text" id="dockerfilePath" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Dockerfile Path">
+                <button id="buildImage" onclick="BuildImage()" class="btn">Build Image</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Remove Image</h2>
+                <input type="text" id="imageNameRmi" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Image Name">
+                <button id="rmiImage" onclick="RmiImage()" class="btn">Remove Image</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Show Image History</h2>
+                <input type="text" id="imageNameHistory" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Image Name">
+                <button id="historyImage" onclick="HistoryImage()" class="btn">Show History</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Tag Image</h2>
+                <input type="text" id="imageNameTag" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Image Name">
+                <input type="text" id="tagName" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Tag Name">
+                <button id="tagImage" onclick="TagImage()" class="btn">Tag Image</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Save Image</h2>
+                <input type="text" id="imageNameSave" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Image Name">
+                <input type="text" id="savePath" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Save Path">
+                <button id="saveImage" onclick="SaveImage()" class="btn">Save Image</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Load Image</h2>
+                <input type="text" id="loadPath" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Load Path">
+                <button id="loadImage" onclick="LoadImage()" class="btn">Load Image</button>
+            </div>
+            <div class="bg-gray-800 shadow-lg rounded-lg p-8">
+                <h2 class="text-2xl font-semibold mb-6">Import Image</h2>
+                <input type="text" id="importPath" class="border border-gray-600 bg-gray-700 p-3 rounded w-full mb-4 text-orange-500 placeholder-gray-500" placeholder="Enter Import Path">
+                <button id="importImage" onclick="ImportImage()" class="btn">Import Image</button>
+            </div>
+        </section>
+    </main>
+    <script>
+        function showLoader() {
+            document.getElementById("loading").style.display = "block";
+        }
+
+        function hideLoader() {
+            document.getElementById("loading").style.display = "none";
+        }
+
+        function makeRequest(url) {
+            showLoader();
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    hideLoader();
+                    if (xhr.status == 200) {
+                        document.getElementById("getOutput").innerHTML = xhr.responseText;
+                    } else {
+                        console.log(xhr.response);
+                        document.getElementById("getOutput").innerHTML = "Something went wrong";
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function GetAllImages() {
+            const url = "http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20images";
+            makeRequest(url);
+        }
+
+        function PullImage() {
+            const imageName = document.getElementById("imageName").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20pull%20${imageName}`;
+            makeRequest(url);
+        }
+
+        function StartContainer() {
+            const containerName = document.getElementById("containerNameStart").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20start%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function StopContainer() {
+            const containerName = document.getElementById("containerNameStop").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20stop%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function RestartContainer() {
+            const containerName = document.getElementById("containerNameRestart").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20restart%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function PauseContainer() {
+            const containerName = document.getElementById("containerNamePause").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20pause%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function UnpauseContainer() {
+            const containerName = document.getElementById("containerNameUnpause").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20unpause%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function KillContainer() {
+            const containerName = document.getElementById("containerNameKill").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20kill%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function RmContainer() {
+            const containerName = document.getElementById("containerNameRm").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20rm%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function ExecCommand() {
+            const containerName = document.getElementById("containerNameExec").value;
+            const command = document.getElementById("commandExec").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20exec%20${containerName}%20${command}`;
+            makeRequest(url);
+        }
+
+        function getAllRunningContainers() {
+            const url = "http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20ps";
+            makeRequest(url);
+        }
+
+        function showStoppedContainer() {
+            const url = "http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20ps%20-a";
+            makeRequest(url);
+        }
+
+        function launchAnContainer(){
+            const containerName = document.getElementById("launchAnContainer").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20run%20-dit%20${containerName}`;
+            makeRequest(url);
+        }
+
+        function PushImage() {
+            const imageName = document.getElementById("imageNamePush").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20push%20${imageName}`;
+            makeRequest(url);
+        }
+
+        function BuildImage() {
+            const dockerfilePath = document.getElementById("dockerfilePath").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20build%20${dockerfilePath}`;
+            makeRequest(url);
+        }
+
+        function RmiImage() {
+            const imageName = document.getElementById("imageNameRmi").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20rmi%20${imageName}`;
+            makeRequest(url);
+        }
+
+        function HistoryImage() {
+            const imageName = document.getElementById("imageNameHistory").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20history%20${imageName}`;
+            makeRequest(url);
+        }
+
+        function TagImage() {
+            const imageName = document.getElementById("imageNameTag").value;
+            const tagName = document.getElementById("tagName").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20tag%20${imageName}%20${tagName}`;
+            makeRequest(url);
+        }
+
+        function SaveImage() {
+            const imageName = document.getElementById("imageNameSave").value;
+            const savePath = document.getElementById("savePath").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20save%20${imageName}%20${savePath}`;
+            makeRequest(url);
+        }
+
+        function LoadImage() {
+            const loadPath = document.getElementById("loadPath").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20load%20${loadPath}`;
+            makeRequest(url);
+        }
+
+        function ImportImage() {
+            const importPath = document.getElementById("importPath").value;
+            const url = `http://13.235.23.122/cgi-bin/docker.py?cmd=docker%20import%20${importPath}`;
+            makeRequest(url);
+        }
+    </script>
+</body>
+</html>
+

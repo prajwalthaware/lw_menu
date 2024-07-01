@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Chat</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #A8D0E6 10%, #F7D1BA 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 2.5rem;
+            background: -webkit-linear-gradient(#A8D0E6, #F7D1BA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            resize: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #A8D0E6;
+            outline: none;
+        }
+
+        button {
+            background-color: #F2A1A1;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #F7D1BA;
+            transform: scale(1.05);
+        }
+
+        #responseContainer {
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 2px solid #ddd;
+            text-align: left;
+            font-size: 16px;
+            color: #333;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your ChatBot</h1>
+        <textarea id="prompt" placeholder="Enter your prompt here..."></textarea>
+        <button id="generateButton">Generate</button>
+        <div id="responseContainer"></div>
+    </div>
+
+    <script>
+        document.getElementById('generateButton').addEventListener('click', function() {
+            var prompt = document.getElementById('prompt').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/cgi-bin/chatbot.py', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById('responseContainer').innerText = xhr.responseText;
+                }
+            };
+
+            xhr.send('prompt=' + encodeURIComponent(prompt));
+        });
+    </script>
+</body>
+</html>
+

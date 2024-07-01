@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        body {
+            background-color: #2b2b2b;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff8c00;
+        }
+        .button {
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .button:hover {
+            background-color: #555555;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Main Page</h1>
+
+    <button class="button" onclick="goToGoogleSearch()">Go to Google Search</button>
+    <button class="button" onclick="goToGeolocation()">Go to Geolocation</button>
+    <button class="button" onclick="goToSpeak()">Go to Speak</button>
+    <button class="button" onclick="goToEmail()">Send Email</button>
+    <button class="button" onclick="goToDocker()">Docker</button>
+    <button class="button" onclick="goToCamera()">Camera</button>
+    <button class="button" onclick="goToHtmlTerminal()">HTML Interpretor</button>
+    <button class="button" onclick="Suggestion()">Suggestion</button>
+    <button class="button" onclick="aws()">AWS</button>
+
+
+    <script>
+        function goToGoogleSearch() {
+            window.location.href = "google_search.html"; // Change this to the path of google_search.html
+        }
+
+        function goToGeolocation() {
+            window.location.href = "geolocation.html"; // Change this to the path of geolocation.html
+        }
+
+        function goToSpeak() {
+            window.location.href = "speak.html"; // Change this to the path of speak.html
+        }
+
+        function goToEmail() {
+            window.location.href = "email.html"; // Change this to the path of email.html
+        }
+
+        function goToDocker() {
+            window.location.href = "docker.html"; // Change this to the path of docker.html
+        }
+	function goToCamera() {
+            window.location.href = "https://13.235.23.122/capture.html";
+        }
+	function goToHtmlTerminal() {
+            window.location.href = "html_live_interpreter.html";
+        }
+	function Suggestion() {
+            window.location.href = "suggestion.html";
+        }
+	 function aws() {
+            window.location.href = "aws/index.html";
+       }
+
+
+    </script>
+</body>
+</html>
+

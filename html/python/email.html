@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Bulk Email</title>
+</head>
+<body>
+    <h1>Send Bulk Email</h1>
+    <form action="/cgi-bin/send_bulk_email.py" method="post">
+        <label for="subject">Subject:</label><br>
+        <input type="text" id="subject" name="subject" required><br><br>
+        
+        <label for="body">Body:</label><br>
+        <textarea id="body" name="body" required></textarea><br><br>
+        
+        <label for="recipients">Recipients (comma-separated):</label><br>
+        <input type="text" id="recipients" name="recipients" required><br><br>
+        
+        <input type="submit" value="Send Emails">
+    </form>
+</body>
+</html>
+

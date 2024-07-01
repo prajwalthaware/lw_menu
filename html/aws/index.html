@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light pastel background */
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff; /* White background for the container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #6c757d; /* Pastel grey */
+            margin-bottom: 20px;
+        }
+        .btn {
+            width: 200px;
+            margin: 10px;
+        }
+        .btn-primary {
+            background-color: #c3aed6; /* Pastel purple */
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #b190d6; /* Darker pastel purple */
+        }
+        .btn-secondary {
+            background-color: #a8d8ea; /* Pastel blue */
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #86c5d8; /* Darker pastel blue */
+        }
+        .btn-success {
+            background-color: #ffb6b9; /* Pastel pink */
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #ffa6a9; /* Darker pastel pink */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to AWS Services</h1>
+        <button onclick="window.location.href='launch_instance.html'" class="btn btn-primary">Launch EC2 Instance</button>
+        <button onclick="window.location.href='get_logs.html'" class="btn btn-secondary">Instance Logs</button>
+        <button onclick="window.location.href='get_ec2_metrics.html'" class="btn btn-success">Get EC2 Metrics</button>
+        <button onclick="window.location.href='cloudwatch_logs.html'" class="btn btn-success">CloudWatch Logs</button>
+        <button onclick="window.location.href='/cgi-bin/s3_bucket.py'" class="btn btn-success">S3 Services</button>
+        <button onclick="window.location.href='sns.html'" class="btn btn-success">SNS Services</button>
+	<button onclick="window.location.href='iam_user.html'" class="btn btn-success">IAM User Services</button>
+	<button onclick="window.location.href='http://localhost:3000/snsemail'" class="btn btn-success">Send SNS Mail</button>
+	<button onclick="window.location.href='http://localhost:3000/volume'" class="btn btn-success">Create Volume</button>
+
+
+
+    </div>
+</body>
+</html>
+

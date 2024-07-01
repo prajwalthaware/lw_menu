@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Coordinates</title>
+</head>
+<body>
+    <h1>Get Coordinates</h1>
+    <form id="geolocation-form" action="/cgi-bin/geolocation.py" method="get">
+        <label for="my_location">Enter your location:</label>
+        <input type="text" id="my_location" name="my_location"><br><br>
+        <label for="location">Enter destination location:</label>
+        <input type="text" id="location" name="location"><br><br>
+        <button type="submit">Get Coordinates</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('geolocation-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var myLocation = document.getElementById('my_location').value;
+            var location = document.getElementById('location').value;
+            fetch('/cgi-bin/geo.py?my_location=' + encodeURIComponent(myLocation) + '&location=' + encodeURIComponent(location))
+                .then(response => response.json())
+                .then(data => {
+                    var resultDiv = document.getElementById('result');
+                    resultDiv.innerText = JSON.stringify(data, null, 2);
+
+                    if (data.google_maps_url) {
+                        var link = document.createElement('a');
+                        link.href = data.google_maps_url;
+                        link.textContent = "View Route on Google Maps";
+                        link.target = "_blank";
+                        resultDiv.appendChild(document.createElement('br'));
+                        resultDiv.appendChild(link);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
+

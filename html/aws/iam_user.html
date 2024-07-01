@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAM User Management</title>
+    <style>
+        body {
+            background-color: #faf3dd; /* Light pastel yellow */
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff; /* White background for the form */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #6c5b7b; /* Pastel purple */
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #355c7d; /* Pastel blue */
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #f8b195; /* Pastel pink */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #f67280; /* Darker pastel pink */
+        }
+        .footer {
+            margin-top: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IAM User Management</h1>
+        <form action="/cgi-bin/create_iam.py" method="post">
+            <label for="name">IAM Username:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="action">Action:</label>
+            <select id="action" name="action" required>
+                <option value="create">Create</option>
+                <option value="delete">Delete</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+        <div class="footer">
+            <p>&copy; 2024 IAM Management. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+

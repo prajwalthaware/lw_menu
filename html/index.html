@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2b2b2b;
+        }
+        .title {
+            background-color: #FFB6C1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30vh;
+            text-align: center;
+            padding: 20px;
+            font-size: 3em;
+            font-weight: bold;
+        }
+        .intro {
+            background-color: #FFDAB9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .intro h1 {
+            font-size: 4em;
+            margin: 0.2em 0;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .intro h3 {
+            font-size: 2em;
+            margin: 0.2em 0;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .scroll-down {
+            margin-top: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+        .section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+        .section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .section .button {
+            padding: 20px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .section .button:hover {
+            transform: scale(1.05);
+        }
+        .section1 {
+            background-color: #E6E6FA;
+        }
+        .section1 .button {
+            background-color: #2b2b2b;
+            color: #E6E6FA;
+        }
+        .section2 {
+            background-color: #B0E0E6;
+        }
+        .section2 .button {
+            background-color: #2b2b2b;
+            color: #B0E0E6;
+        }
+        .section3 {
+            background-color: #FFB6C1;
+        }
+        .section3 .button {
+            background-color: #2b2b2b;
+            color: #FFB6C1;
+        }
+        .section4 {
+            background-color: #FFDAB9;
+        }
+        .section4 .button {
+            background-color: #2b2b2b;
+            color: #FFDAB9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="title">QuantumMesh</div>
+
+    <div class="intro">
+        <h1>Prajwal Thaware</h1>
+        <h3>LW Student | DevOps Engineer</h3>
+        <div class="scroll-down" onclick="scrollToProjects()">&#x25BC;</div>
+    </div>
+
+    <div class="section section1" id="projects">
+        <div>
+            <h2>AWS Services </h2>
+            <button class="button" onclick="goToSection('/aws/index.html')">Go to AWS Services</button>
+        </div>
+    </div>
+
+    <div class="section section2">
+        <div>
+            <h2>Python Services</h2>
+            <button class="button" onclick="goToSection('/python/python.html')">Go to Python Tasks</button>
+        </div>
+    </div>
+
+    <div class="section section3">
+        <div>
+            <h2>ChatBot</h2>
+            <button class="button" onclick="goToSection('chatbot.html')">Talk to ChatBot </button>
+        </div>
+    </div>
+
+    <div class="section section4">
+        <div>
+            <h2>Docker Services</h2>
+            <button class="button" onclick="goToSection('docker2.html')">Go to Docker</button>
+        </div>
+    </div>
+     <div class="section section1">
+        <div>
+            <h2>Video Chat</h2>
+            <button class="button" onclick="goToSection('https://13.234.136.173:8443/')">Go to Video Chat</button>
+        </div>
+    </div>
+
+
+    <script>
+        function scrollToProjects() {
+            document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function goToSection(page) {
+            window.location.href = page;
+        }
+    </script>
+    
+</body>
+</html>
+

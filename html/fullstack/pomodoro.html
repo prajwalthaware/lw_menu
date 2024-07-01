@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        #timer {
+            font-size: 48px;
+            margin: 20px;
+        }
+        a {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="timer">25:00</div>
+    <a href="javascript:void(0)" onclick="startTimer()">Start</a>
+    <a href="javascript:void(0)" onclick="stopTimer()">Stop</a>
+    <a href="javascript:void(0)" onclick="resetTimer()">Reset</a>
+    <div id="message"></div>
+
+    <script>
+        let timerInterval = null;
+        let timerRunning = false; // Flag to track if timer is running
+
+        async function fetchTimer(action = null) {
+            try {
+                const url = action ? `/cgi-bin/pomodoro.py?action=${action}` : `/cgi-bin/pomodoro.py`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                updateTimer(data.minutes, data.seconds);
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                document.getElementById('message').innerText = `Error: ${error.message}`;
+            }
+        }
+
+        function updateTimer(minutes, seconds) {
+            const timerElement = document.getElementById('timer');
+            timerElement.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('message').innerText = '';
+
+            // Clear previous interval to avoid multiple running intervals
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            // Start a new interval only if timer is running
+            if (timerRunning) {
+                timerInterval = setInterval(() => {
+                    if (seconds > 0) {
+                        seconds--;
+                    } else {
+                        if (minutes > 0) {
+                            minutes--;
+                            seconds = 59;
+                        } else {
+                            // Timer ends, clear interval
+                            clearInterval(timerInterval);
+                        }
+                    }
+                    timerElement.innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+        }
+
+        function startTimer() {
+            // Set timerRunning to true when Start button is clicked
+            timerRunning = true;
+            fetchTimer('start');
+        }
+
+        function stopTimer() {
+            // Set timerRunning to false when Stop button is clicked
+            timerRunning = false;
+            fetchTimer('stop');
+        }
+
+        function resetTimer() {
+            // Reset timerRunning and fetch timer data to reset
+            timerRunning = false;
+            fetchTimer('reset');
+        }
+
+        // Initial fetch to sync the timer with server state, but don't start the timer
+        fetchTimer();
+
+        // Optionally, you can use setInterval to fetchTimer() periodically to keep timer updated
+        // setInterval(() => fetchTimer(), 5000); // Example: Fetch timer data every 5 seconds
+    </script>
+</body>
+</html>
+
